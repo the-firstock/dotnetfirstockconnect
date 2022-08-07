@@ -4,11 +4,13 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Description>Package to Call Firstock Broken APIs</Description>
+    <Description>Package to Call Firstock Broker APIs</Description>
     <PackageIcon>firstock.png</PackageIcon>
     <PackageReadmeFile>Readme.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/technologythefirstock/thefirstock_csharp.git</RepositoryUrl>
     <PackageTags>thefirstock, firstock</PackageTags>
+    <Copyright>thefirstock</Copyright>
+    <Version>1.01</Version>
   </PropertyGroup>
 
   <ItemGroup>
