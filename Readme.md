@@ -8,7 +8,7 @@ Please visit [firstock documentation website](https://connect.thefirstock.com/) 
 Use the package manager [nuget](https://www.nuget.org/) to install thefirstock.
 
 ```bash
-dotnet add package thefirstock --version 1.0.0  
+dotnet add package thefirstock  
 ```
 
 ## Login
