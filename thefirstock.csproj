@@ -7,14 +7,15 @@
     <Description>Package to Call Firstock Broker APIs</Description>
     <PackageIcon>firstock.png</PackageIcon>
     <PackageReadmeFile>Readme.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/technologythefirstock/thefirstock_csharp.git</RepositoryUrl>
     <PackageTags>thefirstock, firstock</PackageTags>
     <Copyright>thefirstock</Copyright>
-    <Version>1.0.1</Version>
+    <Version>2.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\..\Firstock New\firstock\public\firstock.png">
+    <None Include="firstock.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
