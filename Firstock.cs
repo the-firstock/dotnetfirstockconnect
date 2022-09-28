@@ -11,7 +11,7 @@ namespace thefirstock
     {
         private string token = string.Empty;
         private string userId = string.Empty;
-        private string URL = "https://connect.thefirstock.com/api/";
+        private string URL = "https://connect.thefirstock.com/apiV2/";
 
         #region Firstock Methods
         public dynamic login(string userId, string password, string DOBnPAN, string vendorCode, string apikey)
@@ -256,7 +256,7 @@ namespace thefirstock
             requestBody.actid = configData.userId;
             requestBody.jKey = configData.token;
             requestBody.product = product;
-            var response = CallWebAPIAsync("holding", requestBody);
+            var response = CallWebAPIAsync("holdings", requestBody);
             return response;
         }
         public dynamic limits()
@@ -387,7 +387,8 @@ namespace thefirstock
         string exchange,
         string token,
         string endTime,
-        string startTime
+        string startTime,
+        string intrv
 )
         {
             var configData = ReadDataFromJson("config.json");
@@ -399,6 +400,7 @@ namespace thefirstock
             requestBody.token = token;
             requestBody.endtime = endTime;
             requestBody.starttime = startTime;
+            requestBody.intrv = intrv;
             var response = CallWebAPIAsync("timePriceSeries", requestBody);
             return response;
         }
