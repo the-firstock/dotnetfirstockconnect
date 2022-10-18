@@ -7,14 +7,15 @@ using System.Text;
 namespace thefirstock
 {
 
-  public class Firstock
+
+    public class Firstock
     {
         private string token = string.Empty;
         private string userId = string.Empty;
         private string URL = "https://connect.thefirstock.com/apiV2/";
 
         #region Firstock Methods
-        public dynamic login(string userId, string password, string DOBnPAN, string vendorCode, string apikey)
+        public dynamic login(string userId, string password, string TOTP, string vendorCode, string apikey)
         {
 
             dynamic requestBody = new ExpandoObject();
@@ -23,7 +24,7 @@ namespace thefirstock
 
             requestBody.password = password;
 
-            requestBody.DOBnPAN = DOBnPAN;
+            requestBody.TOTP = TOTP;
 
             requestBody.vendorCode = vendorCode;
 
@@ -145,27 +146,27 @@ namespace thefirstock
             return response;
         }
 
-        public dynamic cancelOrder(string norenordno)
+        public dynamic cancelOrder(string orderNumber)
         {
             var configData = ReadDataFromJson("config.json");
             PostObject postObject = new PostObject()
             {
                 userId = configData.userId,
                 jKey = configData.token,
-                norenordno = norenordno
+                orderNumber = orderNumber
             };
             var response = CallWebAPIAsync("cancelOrder", postObject);
             return response;
         }
 
-        public dynamic singleOrderHistory(string norenordno)
+        public dynamic singleOrderHistory(string orderNumber)
         {
             var configData = ReadDataFromJson("config.json");
             PostObject postObject = new PostObject()
             {
                 userId = configData.userId,
                 jKey = configData.token,
-                norenordno = norenordno
+                orderNumber = orderNumber
             };
             var response = CallWebAPIAsync("singleOrderHistory", postObject);
             return response;
@@ -196,7 +197,7 @@ namespace thefirstock
             return response;
         }
         public dynamic modifyOrder(
-           string norenordno,
+           string orderNumber,
            string price,
            string quantity,
            string triggerPrice,
@@ -211,7 +212,7 @@ namespace thefirstock
             requestBody.userId = configData.userId;
             requestBody.actid = configData.userId;
             requestBody.jKey = configData.token;
-            requestBody.norenordno = norenordno;
+            requestBody.orderNumber = orderNumber;
             requestBody.tradingSymbol = tradingSymbol;
             requestBody.quantity = quantity;
             requestBody.price = price;
@@ -352,16 +353,8 @@ namespace thefirstock
         }
 
         public dynamic spanCalculator(
-        string exchange,
-        string instname,
-        string symbolName,
-        string expd,
-        string optt,
-        string strikePrice,
-        string netQuantity,
-        string buyQuantity,
-        string sellQuantity,
-        string product
+            List<spanCalcualtorObject> list
+
  )
         {
             var configData = ReadDataFromJson("config.json");
@@ -369,16 +362,8 @@ namespace thefirstock
             requestBody.userId = configData.userId;
             requestBody.actid = configData.userId;
             requestBody.jKey = configData.token;
-            requestBody.exchange = exchange;
-            requestBody.instname = instname;
-            requestBody.symbolName = symbolName;
-            requestBody.product = product;
-            requestBody.expd = expd;
-            requestBody.optt = optt;
-            requestBody.strikePrice = strikePrice;
-            requestBody.netQuantity = netQuantity;
-            requestBody.buyQuantity = buyQuantity;
-            requestBody.sellQuantity = sellQuantity;
+            requestBody.data = list;
+
             var response = CallWebAPIAsync("spanCalculators", requestBody);
             return response;
         }
