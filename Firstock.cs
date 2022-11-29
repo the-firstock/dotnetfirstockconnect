@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System.Dynamic;
 using System.Net.Http.Headers;
 using System.Text;
+using Websocket.Client;
 
 namespace thefirstock
 {
@@ -13,6 +14,7 @@ namespace thefirstock
         private string token = string.Empty;
         private string userId = string.Empty;
         private string URL = "https://connect.thefirstock.com/apiV2/";
+        private string connection = "wss://norenapi.thefirstock.com/NorenWSTP/";
 
         #region Firstock Methods
         public dynamic login(string userId, string password, string TOTP, string vendorCode, string apikey)
@@ -274,6 +276,31 @@ namespace thefirstock
             return response;
         }
 
+        public dynamic basketMargin(
+   string exchange,
+   string tradingSymbol,
+   string quantity,
+   string transactionType,
+   string price,
+   string product,
+   string priceType
+   )
+        {
+            var configData = ReadDataFromJson("config.json");
+            dynamic requestBody = new ExpandoObject();
+            requestBody.userId = configData.userId;
+            requestBody.jKey = configData.token;
+            requestBody.exchange = exchange;
+            requestBody.tradingSymbol = tradingSymbol;
+            requestBody.quantity = quantity;
+            requestBody.product = transactionType;
+            requestBody.price = price;
+            requestBody.product = product;
+            requestBody.priceType = priceType;
+            var response = CallWebAPIAsync("basketMargin", requestBody);
+            return response;
+        }
+
         public dynamic getQuotes(
           string exchange,
           string token
@@ -389,6 +416,286 @@ namespace thefirstock
             var response = CallWebAPIAsync("timePriceSeries", requestBody);
             return response;
         }
+
+        public dynamic optionGreek(
+            string expiryDate,
+            string strikePrice,
+            string spotPrice,
+            string initRate,
+            string volatility,
+            string optionType
+    )
+        {
+            var configData = ReadDataFromJson("config.json");
+            dynamic requestBody = new ExpandoObject();
+
+            requestBody.userId = configData.userId;
+            requestBody.jKey = configData.token;
+            requestBody.expiryDate = expiryDate;
+            requestBody.strikePrice = strikePrice;
+            requestBody.spotPrice = spotPrice;
+            requestBody.initRate = initRate;
+            requestBody.volatility = volatility;
+            requestBody.optionType = optionType;
+            var response = CallWebAPIAsync("optionGreek", requestBody);
+            return response;
+        }
+
+        public dynamic multiPlaceOrder(
+            string userId,
+            string jKey,
+            string putSellStrikePrice,
+            string expiry,
+            string volatility,
+            string optionType
+    )
+        {
+            var configData = ReadDataFromJson("config.json");
+            dynamic requestBody = new ExpandoObject();
+
+            requestBody.userId = configData.userId;
+            requestBody.jKey = configData.token;
+            requestBody.expiryDate = expiry;
+           // requestBody.strikePrice = strikePrice;
+            //requestBody.spotPrice = spotPrice;
+            //requestBody.initRate = initRate;
+            requestBody.volatility = volatility;
+            requestBody.optionType = optionType;
+            var response = CallWebAPIAsync("multiPlaceOrder", requestBody);
+            return response;
+        }
+
+        public dynamic bearPutSpread(
+            string symbol,
+            string putBuyStrikePrice,
+            string putSellStrikePrice,
+            string expiry,
+            string product,
+            string quantity,
+            string remarks,
+            string jKey,
+            string actId
+    )
+        {
+            var configData = ReadDataFromJson("config.json");
+            dynamic requestBody = new ExpandoObject();
+
+            requestBody.jKey = configData.token;
+            requestBody.symbol = symbol;
+            requestBody.putBuyStrikePrice = putBuyStrikePrice;
+            requestBody.putSellStrikePrice = putSellStrikePrice;
+            requestBody.expiry = expiry;
+            requestBody.product = product;
+            requestBody.quantity = quantity;
+            requestBody.remarks = remarks;
+            requestBody.actId = actId;
+            var response = CallWebAPIAsync("multiPlaceOrder", requestBody);
+            return response;
+        }
+
+        public dynamic bullCallSpread(
+           string symbol,
+           string callBuyStrikePrice,
+           string callSellStrikePrice,
+           string expiry,
+           string product,
+           string quantity,
+           string remarks,
+           string jKey,
+           string actId
+   )
+        {
+            var configData = ReadDataFromJson("config.json");
+            dynamic requestBody = new ExpandoObject();
+
+            requestBody.jKey = configData.token;
+            requestBody.symbol = symbol;
+            requestBody.callBuyStrikePrice = callBuyStrikePrice;
+            requestBody.callSellStrikePrice = callSellStrikePrice;
+            requestBody.expiry = expiry;
+            requestBody.product = product;
+            requestBody.quantity = quantity;
+            requestBody.remarks = remarks;
+            requestBody.actId = actId;
+            var response = CallWebAPIAsync("bullCallSpread", requestBody);
+            return response;
+        }
+
+        public dynamic longStraddle(
+           string symbol,
+           string callBuyStrikePrice,
+           string callSellStrikePrice,
+           string expiry,
+           string product,
+           string quantity,
+           string remarks
+
+   )
+        {
+            var configData = ReadDataFromJson("config.json");
+            dynamic requestBody = new ExpandoObject();
+
+            requestBody.symbol = symbol;
+            requestBody.callBuyStrikePrice = callBuyStrikePrice;
+            requestBody.callSellStrikePrice = callSellStrikePrice;
+            requestBody.expiry = expiry;
+            requestBody.product = product;
+            requestBody.quantity = quantity;
+            requestBody.remarks = remarks;
+            var response = CallWebAPIAsync("longStraddle", requestBody);
+            return response;
+        }
+
+        public dynamic shortStraddle(
+           string symbol,
+           string callBuyStrikePrice,
+           string callSellStrikePrice,
+           string expiry,
+           string product,
+           string quantity,
+           string remarks,
+           string hedgeValue,
+           string hedge
+   )
+        {
+            var configData = ReadDataFromJson("config.json");
+            dynamic requestBody = new ExpandoObject();
+
+            requestBody.jKey = configData.token;
+            requestBody.symbol = symbol;
+            requestBody.callBuyStrikePrice = callBuyStrikePrice;
+            requestBody.callSellStrikePrice = callSellStrikePrice;
+            requestBody.expiry = expiry;
+            requestBody.product = product;
+            requestBody.quantity = quantity;
+            requestBody.remarks = remarks;
+            requestBody.hedgeValue = hedgeValue;
+            requestBody.hedge = hedge;
+            var response = CallWebAPIAsync("shortStraddle", requestBody);
+            return response;
+        }
+        #endregion
+
+        #region Websockets
+        public WebsocketClient initializeWebSocket()
+        {
+            var url = new Uri(connection);
+            var client = new WebsocketClient(url);
+            client.ReconnectTimeout = TimeSpan.FromSeconds(0.3);
+
+            var configData = ReadDataFromJson("config.json");
+            dynamic requestBody = new ExpandoObject();
+            requestBody.t = "c";
+            requestBody.uid = configData.userId;
+            requestBody.actid = configData.userId;
+            requestBody.susertoken = configData.token;
+            requestBody.source = "API";
+            string authorizeBody = JsonConvert.SerializeObject(requestBody);
+
+            client.ReconnectionHappened.Subscribe(info =>
+            { 
+                if (info.Type.ToString() == "NoMessageReceived")
+                {
+                    client.Send(authorizeBody);
+
+                }
+            });
+
+            return client;
+        }
+
+        #region Websockets Methods
+        public string startWebsockets()
+        {
+            var configData = ReadDataFromJson("config.json");
+            dynamic requestBody = new ExpandoObject();
+            requestBody.t = "c";
+            requestBody.uid = configData.userId;
+            requestBody.actid = configData.userId;
+            requestBody.susertoken = configData.token;
+            requestBody.source = "API";
+            string authorizeBody = JsonConvert.SerializeObject(requestBody);
+            return authorizeBody;
+        }
+        public string subscribeTouchline(string k)
+        {
+            dynamic messageData = new ExpandoObject();
+            messageData.t = "t";
+            messageData.k = k;
+            string requestBody = JsonConvert.SerializeObject(messageData);
+            return requestBody;
+        }
+
+        public string subscribeTouchlineAcknowledgement()
+        {
+            dynamic messageData = new ExpandoObject();
+            messageData.t = "tk";
+            string requestBody = JsonConvert.SerializeObject(messageData);
+            return requestBody;
+        }
+
+        public string unsubscribeTouchline(string k)
+        {
+            dynamic messageData = new ExpandoObject();
+            messageData.t = "u";
+            messageData.k = k;
+            string requestBody = JsonConvert.SerializeObject(messageData);
+            return requestBody;
+        }
+
+        public string subscribeDepth(string k)
+        {
+            dynamic messageData = new ExpandoObject();
+            messageData.t = "d";
+            messageData.k = k;
+            string requestBody = JsonConvert.SerializeObject(messageData);
+            return requestBody;
+        }
+
+        public string subscribeDepthAcknowledgement()
+        {
+            dynamic messageData = new ExpandoObject();
+            messageData.t = "dk";
+           
+            string requestBody = JsonConvert.SerializeObject(messageData);
+            return requestBody;
+        }
+
+        public string unsubscribeDepth(string k)
+        {
+            dynamic messageData = new ExpandoObject();
+            messageData.t = "dk";
+            messageData.k = k;
+            string requestBody = JsonConvert.SerializeObject(messageData);
+            return requestBody;
+        }
+        public string subscribeOrderUpdate(string k)
+        {
+            dynamic messageData = new ExpandoObject();
+            var configData = ReadDataFromJson("config.json");
+            messageData.t = "o";
+            messageData.actid = configData.userId;
+            string requestBody = JsonConvert.SerializeObject(messageData);
+            return requestBody;
+        }
+        public string subscribeOrderAcknowledgement()
+        {
+            dynamic messageData = new ExpandoObject();
+            messageData.t = "ok";
+          
+            string requestBody = JsonConvert.SerializeObject(messageData);
+            return requestBody;
+        }
+        public string unsubscribeOrderUpdate()
+        {
+            dynamic messageData = new ExpandoObject();
+            messageData.t = "uo";
+          
+            string requestBody = JsonConvert.SerializeObject(messageData);
+            return requestBody;
+        }
+        #endregion
+
         #endregion
 
         #region Old Method
