@@ -13,11 +13,11 @@ namespace thefirstock
     {
         private string token = string.Empty;
         private string userId = string.Empty;
-        private string URL = "https://connect.thefirstock.com/apiV2/";
+        private string URL = "https://connect-dev.thefirstock.com/api/";
         private string connection = "wss://norenapi.thefirstock.com/NorenWSTP/";
 
         #region Firstock Methods
-        public dynamic login(string userId, string password, string TOTP, string vendorCode, string apikey)
+        public dynamic login(string userId, string password, string TOTP, string vendorCode, string apiKey)
         {
 
             dynamic requestBody = new ExpandoObject();
@@ -30,7 +30,7 @@ namespace thefirstock
 
             requestBody.vendorCode = vendorCode;
 
-            requestBody.apiKey = apikey;
+            requestBody.apiKey = apiKey;
             dynamic responseBody = new ExpandoObject();
             var response = CallWebAPIAsync("login", requestBody);
             if (!(response is ExpandoObject))
@@ -314,7 +314,7 @@ namespace thefirstock
             requestBody.jKey = configData.token;
             requestBody.exchange = exchange;
             requestBody.token = token;
-            var response = CallWebAPIAsync("getQuotes", requestBody);
+            var response = CallWebAPIAsync("getQuote", requestBody);
             return response;
         }
         public dynamic searchScripts(
@@ -474,7 +474,7 @@ namespace thefirstock
             string quantity,
             string remarks,
             string jKey,
-            string actId
+            string userId
     )
         {
             var configData = ReadDataFromJson("config.json");
@@ -488,7 +488,7 @@ namespace thefirstock
             requestBody.product = product;
             requestBody.quantity = quantity;
             requestBody.remarks = remarks;
-            requestBody.actId = actId;
+            requestBody.userId = userId;
             var response = CallWebAPIAsync("multiPlaceOrder", requestBody);
             return response;
         }
@@ -502,7 +502,7 @@ namespace thefirstock
            string quantity,
            string remarks,
            string jKey,
-           string actId
+           string userId
    )
         {
             var configData = ReadDataFromJson("config.json");
@@ -516,7 +516,7 @@ namespace thefirstock
             requestBody.product = product;
             requestBody.quantity = quantity;
             requestBody.remarks = remarks;
-            requestBody.actId = actId;
+            requestBody.actId = userId;
             var response = CallWebAPIAsync("bullCallSpread", requestBody);
             return response;
         }
