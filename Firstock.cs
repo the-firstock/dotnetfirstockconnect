@@ -277,26 +277,15 @@ namespace thefirstock
         }
 
         public dynamic basketMargin(
-   string exchange,
-   string tradingSymbol,
-   string quantity,
-   string transactionType,
-   string price,
-   string product,
-   string priceType
+        List<basketMarginObject> basket
    )
         {
             var configData = ReadDataFromJson("config.json");
             dynamic requestBody = new ExpandoObject();
             requestBody.userId = configData.userId;
             requestBody.jKey = configData.token;
-            requestBody.exchange = exchange;
-            requestBody.tradingSymbol = tradingSymbol;
-            requestBody.quantity = quantity;
-            requestBody.product = transactionType;
-            requestBody.price = price;
-            requestBody.product = product;
-            requestBody.priceType = priceType;
+           
+            requestBody.basket = basket;
             var response = CallWebAPIAsync("basketMargin", requestBody);
             return response;
         }
@@ -380,7 +369,7 @@ namespace thefirstock
         }
 
         public dynamic spanCalculator(
-            List<spanCalcualtorObject> list
+            List<spanCalculatorObject> list
 
  )
         {
@@ -400,7 +389,7 @@ namespace thefirstock
         string token,
         string endTime,
         string startTime,
-        string intrv
+        string interval
 )
         {
             var configData = ReadDataFromJson("config.json");
@@ -410,9 +399,9 @@ namespace thefirstock
             requestBody.jKey = configData.token;
             requestBody.exchange = exchange;
             requestBody.token = token;
-            requestBody.endtime = endTime;
-            requestBody.starttime = startTime;
-            requestBody.intrv = intrv;
+            requestBody.endTime = endTime;
+            requestBody.startTime = startTime;
+            requestBody.interval = interval;
             var response = CallWebAPIAsync("timePriceSeries", requestBody);
             return response;
         }
@@ -442,12 +431,7 @@ namespace thefirstock
         }
 
         public dynamic multiPlaceOrder(
-            string userId,
-            string jKey,
-            string putSellStrikePrice,
-            string expiry,
-            string volatility,
-            string optionType
+          List<multiPlaceOrderObject> data
     )
         {
             var configData = ReadDataFromJson("config.json");
@@ -455,13 +439,8 @@ namespace thefirstock
 
             requestBody.userId = configData.userId;
             requestBody.jKey = configData.token;
-            requestBody.expiryDate = expiry;
-           // requestBody.strikePrice = strikePrice;
-            //requestBody.spotPrice = spotPrice;
-            //requestBody.initRate = initRate;
-            requestBody.volatility = volatility;
-            requestBody.optionType = optionType;
-            var response = CallWebAPIAsync("multiPlaceOrder", requestBody);
+            requestBody.data = data;
+            var response = CallWebAPIAsync("strategies/multiPlaceOrders", requestBody);
             return response;
         }
 
@@ -472,9 +451,8 @@ namespace thefirstock
             string expiry,
             string product,
             string quantity,
-            string remarks,
-            string jKey,
-            string userId
+            string remarks
+          
     )
         {
             var configData = ReadDataFromJson("config.json");
@@ -488,8 +466,8 @@ namespace thefirstock
             requestBody.product = product;
             requestBody.quantity = quantity;
             requestBody.remarks = remarks;
-            requestBody.userId = userId;
-            var response = CallWebAPIAsync("multiPlaceOrder", requestBody);
+            requestBody.userId = configData.userId;
+            var response = CallWebAPIAsync("strategies/bearPutSpread", requestBody);
             return response;
         }
 
@@ -500,9 +478,8 @@ namespace thefirstock
            string expiry,
            string product,
            string quantity,
-           string remarks,
-           string jKey,
-           string userId
+           string remarks
+      
    )
         {
             var configData = ReadDataFromJson("config.json");
@@ -516,15 +493,15 @@ namespace thefirstock
             requestBody.product = product;
             requestBody.quantity = quantity;
             requestBody.remarks = remarks;
-            requestBody.actId = userId;
-            var response = CallWebAPIAsync("bullCallSpread", requestBody);
+            requestBody.userId = configData.userId;
+            var response = CallWebAPIAsync("strategies/bullCallSpread", requestBody);
             return response;
         }
 
         public dynamic longStraddle(
            string symbol,
-           string callBuyStrikePrice,
-           string callSellStrikePrice,
+           string strikePrice,
+           //string callSellStrikePrice,
            string expiry,
            string product,
            string quantity,
@@ -536,42 +513,114 @@ namespace thefirstock
             dynamic requestBody = new ExpandoObject();
 
             requestBody.symbol = symbol;
-            requestBody.callBuyStrikePrice = callBuyStrikePrice;
-            requestBody.callSellStrikePrice = callSellStrikePrice;
+            requestBody.strikePrice = strikePrice;
+            //requestBody.callSellStrikePrice = callSellStrikePrice;
             requestBody.expiry = expiry;
             requestBody.product = product;
             requestBody.quantity = quantity;
             requestBody.remarks = remarks;
-            var response = CallWebAPIAsync("longStraddle", requestBody);
+            requestBody.userId = configData.userId;
+            requestBody.jKey = configData.token;
+            var response = CallWebAPIAsync("strategies/longStraddle", requestBody);
             return response;
         }
 
         public dynamic shortStraddle(
            string symbol,
-           string callBuyStrikePrice,
-           string callSellStrikePrice,
+           string strikePrice,
+           //string callSellStrikePrice,
            string expiry,
            string product,
            string quantity,
            string remarks,
-           string hedgeValue,
-           string hedge
+           int hedgeValue,
+           Boolean hedge
+
    )
         {
             var configData = ReadDataFromJson("config.json");
             dynamic requestBody = new ExpandoObject();
 
             requestBody.jKey = configData.token;
+            requestBody.userId = configData.userId;
             requestBody.symbol = symbol;
-            requestBody.callBuyStrikePrice = callBuyStrikePrice;
-            requestBody.callSellStrikePrice = callSellStrikePrice;
+            requestBody.strikePrice = strikePrice;
+           
             requestBody.expiry = expiry;
             requestBody.product = product;
             requestBody.quantity = quantity;
             requestBody.remarks = remarks;
             requestBody.hedgeValue = hedgeValue;
             requestBody.hedge = hedge;
-            var response = CallWebAPIAsync("shortStraddle", requestBody);
+
+            var response = CallWebAPIAsync("strategies/shortStraddle", requestBody);
+            return response;
+        }
+
+
+
+        public dynamic longStrangle(
+           string symbol,
+           string callStrikePrice,
+           string putStrikePrice,
+           string expiry,
+           string product,
+           string quantity,
+           string remarks
+         
+
+   )
+        {
+            var configData = ReadDataFromJson("config.json");
+            dynamic requestBody = new ExpandoObject();
+
+            requestBody.jKey = configData.token;
+            requestBody.userId = configData.userId;
+            requestBody.symbol = symbol;
+            requestBody.callStrikePrice = callStrikePrice;
+            requestBody.putStrikePrice = putStrikePrice;
+            requestBody.expiry = expiry;
+            requestBody.product = product;
+            requestBody.quantity = quantity;
+            requestBody.remarks = remarks;
+         
+
+            var response = CallWebAPIAsync("strategies/longStrangle", requestBody);
+            return response;
+        }
+
+
+        public dynamic shortStrangle(
+           string symbol,
+           string callStrikePrice,
+           string putStrikePrice,
+           string expiry,
+           string product,
+           string quantity,
+           string remarks,
+             int hedgeValue,
+           Boolean hedge
+
+
+   )
+        {
+            var configData = ReadDataFromJson("config.json");
+            dynamic requestBody = new ExpandoObject();
+
+            requestBody.jKey = configData.token;
+            requestBody.userId = configData.userId;
+            requestBody.symbol = symbol;
+            requestBody.callStrikePrice = callStrikePrice;
+            requestBody.putStrikePrice = putStrikePrice;
+            requestBody.expiry = expiry;
+            requestBody.product = product;
+            requestBody.quantity = quantity;
+            requestBody.remarks = remarks;
+            requestBody.hedgeValue = hedgeValue;
+            requestBody.hedge = hedge;
+
+
+            var response = CallWebAPIAsync("strategies/shortStrangle", requestBody);
             return response;
         }
         #endregion

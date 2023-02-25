@@ -10,10 +10,22 @@ namespace thefirstock
 
         public string actid { get; set; }
     }
-    public class spanCalcualtorObject
+    public class basketMarginObject
     {
         public string exchange { get; set; }
-        public string instname { get; set; }
+
+        public string tradingSymbol { get; set; }
+        public string quantity { get; set; }
+        public string transactionType { get; set; }
+        public string price { get; set; }
+        public string product { get; set; }
+        public string priceType { get; set; }
+    }
+
+    public class spanCalculatorObject
+    {
+        public string exchange { get; set; }
+        public string instrumentName { get; set; }
         public string symbolName { get; set; }
         public string expireDate { get; set; }
         public string optionType { get; set; }
@@ -23,25 +35,20 @@ namespace thefirstock
         public string sellQuantity { get; set; }
         public string product { get; set; }
 
-        public spanCalcualtorObject(string exchange, string instname, string symbolName, string expireDate, string optionType, string strikePrice, string netQuantity,
-            string buyQuantity, string sellQuantity, string product
-            )
-        {
-            this.exchange = exchange;
-            this.instname = instname;
-            this.symbolName = symbolName;
-            this.expireDate = expireDate;
-            this.optionType = optionType;
-            this.strikePrice = strikePrice;
-            this.netQuantity = netQuantity;
-            this.buyQuantity = buyQuantity;
-            this.sellQuantity = sellQuantity;
-            this.product = product;
+    }
 
-
-
-
-        }
+    public class  multiPlaceOrderObject
+    {
+        public string exchange { get; set; }
+        public string tradingSymbol { get; set; }
+        public string quantity { get; set; }
+        public string price { get; set; }
+        public string product { get; set; }
+        public string transactionType { get; set; }
+        public string priceType { get; set; }
+        public string retention { get; set; }
+        public string triggerPrice { get; set; }
+        public string remarks { get; set; }
 
     }
 }
