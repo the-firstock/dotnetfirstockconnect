@@ -89,8 +89,8 @@ using (var client = firstock.initializeWebSocket())
         {
             /////Prints the message successfully////
             Console.WriteLine("Message received: " + msg);
-            client.Send(firstock.subscribeTouchline("NSE|26000"));// Subscribe to NIFTY
-            client.Send(firstock.subscribeTouchline("NSE|26009"));// Subscribe to BANKNIFTY
+            client.Send(firstock.subscribeFeedAcknowledgement("NSE|26000"));// Subscribe to NIFTY
+            client.Send(firstock.subscribeFeedAcknowledgement("NSE|26009"));// Subscribe to BANKNIFTY
         });
 
         client.Start();
