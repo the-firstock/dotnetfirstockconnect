@@ -666,7 +666,16 @@ namespace thefirstock
             string authorizeBody = JsonConvert.SerializeObject(requestBody);
             return authorizeBody;
         }
-        public string subscribeTouchline(string k)
+
+        public string subscribeFeed(string k)
+        {
+            dynamic messageData = new ExpandoObject();
+            messageData.t = "tf";
+            messageData.k = k;
+            string requestBody = JsonConvert.SerializeObject(messageData);
+            return requestBody;
+        }
+        public string subscribeFeedAcknowledgement(string k)
         {
             dynamic messageData = new ExpandoObject();
             messageData.t = "t";
@@ -675,15 +684,7 @@ namespace thefirstock
             return requestBody;
         }
 
-        public string subscribeTouchlineAcknowledgement()
-        {
-            dynamic messageData = new ExpandoObject();
-            messageData.t = "tk";
-            string requestBody = JsonConvert.SerializeObject(messageData);
-            return requestBody;
-        }
-
-        public string unsubscribeTouchline(string k)
+        public string unsubscribeFeed(string k)
         {
             dynamic messageData = new ExpandoObject();
             messageData.t = "u";
