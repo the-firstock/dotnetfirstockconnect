@@ -3,6 +3,10 @@
 To communicate with the Firstock Connect API using C#, you can use the official C# client library provided by Firstock.
 <br /> Licensed under the MIT License.
 
+## Version
+
+[Version - 3.0.1](https://www.nuget.org/packages/thefirstock)
+
 ## Documentation
 
 - C# client documentation
