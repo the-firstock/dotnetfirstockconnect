@@ -13,7 +13,7 @@ namespace thefirstock
     {
         private string token = string.Empty;
         private string userId = string.Empty;
-        private string URL = "https://connect-dev.thefirstock.com/api/V3/";
+        private string URL = "https://connect.thefirstock.com/api/V3/";
         private string connection = "wss://norenapi.thefirstock.com/NorenWSTP/";
 
         #region Firstock Methods
