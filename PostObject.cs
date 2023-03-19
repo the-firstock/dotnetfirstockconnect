@@ -51,6 +51,20 @@ namespace thefirstock
         public string remarks { get; set; }
 
     }
+    public class multiQuotesObject
+    {
+        public string exchange { get; set; }
+        public string token { get; set; }
+      
+
+    }
+    public class MultiQuotesltpsObject
+    {
+        public string exchange { get; set; }
+        public string token { get; set; }
+
+
+    }
 }
 
 

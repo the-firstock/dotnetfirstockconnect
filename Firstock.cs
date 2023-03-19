@@ -306,6 +306,50 @@ namespace thefirstock
             var response = CallWebAPIAsync("getQuote", requestBody);
             return response;
         }
+        public dynamic getQuoteltp(
+        string exchange,
+        string token
+       )
+        {
+            var configData = ReadDataFromJson("config.json");
+            dynamic requestBody = new ExpandoObject();
+
+            requestBody.userId = configData.userId;
+            requestBody.jKey = configData.token;
+            requestBody.exchange = exchange;
+            requestBody.token = token;
+            var response = CallWebAPIAsync("getQuote/ltp", requestBody);
+            return response;
+        }
+        public dynamic getMultiQuotes(
+         List<multiQuotesObject> data
+        )
+        {
+            var configData = ReadDataFromJson("config.json");
+            dynamic requestBody = new ExpandoObject();
+
+            requestBody.userId = configData.userId;
+            requestBody.jKey = configData.token;
+            requestBody.data = data;
+        
+            var response = CallWebAPIAsync("getMultiQuotes", requestBody);
+            return response;
+        }
+
+        public dynamic getMultiQuotesltp(
+        List<MultiQuotesltpsObject> data
+       )
+        {
+            var configData = ReadDataFromJson("config.json");
+            dynamic requestBody = new ExpandoObject();
+
+            requestBody.userId = configData.userId;
+            requestBody.jKey = configData.token;
+            requestBody.data = data;
+
+            var response = CallWebAPIAsync("getMultiQuotes/ltp", requestBody);
+            return response;
+        }
         public dynamic searchScripts(
             string stext
          )
