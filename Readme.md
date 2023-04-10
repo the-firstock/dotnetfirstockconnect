@@ -3,6 +3,10 @@
 To communicate with the Firstock Connect API using C#, you can use the official C# client library provided by Firstock.
 <br /> Licensed under the MIT License.
 
+## Version
+
+[Version - 3.0.1](https://www.nuget.org/packages/thefirstock)
+
 ## Documentation
 
 - C# client documentation
@@ -89,8 +93,8 @@ using (var client = firstock.initializeWebSocket())
         {
             /////Prints the message successfully////
             Console.WriteLine("Message received: " + msg);
-            client.Send(firstock.subscribeTouchline("NSE|26000"));// Subscribe to NIFTY
-            client.Send(firstock.subscribeTouchline("NSE|26009"));// Subscribe to BANKNIFTY
+            client.Send(firstock.subscribeFeedAcknowledgement("NSE|26000"));// Subscribe to NIFTY
+            client.Send(firstock.subscribeFeedAcknowledgement("NSE|26009"));// Subscribe to BANKNIFTY
         });
 
         client.Start();
