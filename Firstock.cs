@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Dynamic;
 using System.Net.Http.Headers;
+using System.Net.WebSockets;
 using System.Text;
 using Websocket.Client;
 
@@ -15,6 +17,7 @@ namespace thefirstock
         private string userId = string.Empty;
         private string URL = "https://connect.thefirstock.com/api/V3/";
         private string connection = "wss://norenapi.thefirstock.com/NorenWSTP/";
+
 
         #region Firstock Methods
         public dynamic login(string userId, string password, string TOTP, string vendorCode, string apiKey)
@@ -284,7 +287,7 @@ namespace thefirstock
             dynamic requestBody = new ExpandoObject();
             requestBody.userId = configData.userId;
             requestBody.jKey = configData.token;
-           
+
             requestBody.basket = basket;
             var response = CallWebAPIAsync("basketMargin", requestBody);
             return response;
@@ -331,7 +334,7 @@ namespace thefirstock
             requestBody.userId = configData.userId;
             requestBody.jKey = configData.token;
             requestBody.data = data;
-        
+
             var response = CallWebAPIAsync("getMultiQuotes", requestBody);
             return response;
         }
@@ -496,7 +499,7 @@ namespace thefirstock
             string product,
             string quantity,
             string remarks
-          
+
     )
         {
             var configData = ReadDataFromJson("config.json");
@@ -523,7 +526,7 @@ namespace thefirstock
            string product,
            string quantity,
            string remarks
-      
+
    )
         {
             var configData = ReadDataFromJson("config.json");
@@ -589,7 +592,7 @@ namespace thefirstock
             requestBody.userId = configData.userId;
             requestBody.symbol = symbol;
             requestBody.strikePrice = strikePrice;
-           
+
             requestBody.expiry = expiry;
             requestBody.product = product;
             requestBody.quantity = quantity;
@@ -611,7 +614,7 @@ namespace thefirstock
            string product,
            string quantity,
            string remarks
-         
+
 
    )
         {
@@ -627,7 +630,7 @@ namespace thefirstock
             requestBody.product = product;
             requestBody.quantity = quantity;
             requestBody.remarks = remarks;
-         
+
 
             var response = CallWebAPIAsync("strategies/longStrangle", requestBody);
             return response;
@@ -669,7 +672,66 @@ namespace thefirstock
         }
         #endregion
 
-        #region Websockets
+        #region Websocket New Code
+
+        public void initializeWebsocket(ClientWebSocket webSocket)
+        {
+            Uri uri = new Uri(connection);
+            webSocket.ConnectAsync(uri, CancellationToken.None).Wait();
+        }
+
+        public string startWebsocketDetails(ClientWebSocket webSocket, Action callback)
+        {
+
+
+            var configData = ReadDataFromJson("config.json");
+            dynamic requestBody = new ExpandoObject();
+            requestBody.t = "c";
+            requestBody.uid = configData.userId;
+            requestBody.actid = configData.userId;
+            requestBody.susertoken = configData.token;
+            requestBody.source = "API";
+            sendWebsocketDetails(requestBody, webSocket);
+            string socketResult = getWebsocketDetails(webSocket);
+            JObject json = JObject.Parse(socketResult.ToString());
+            if (json["t"].ToString() == "ck" && json["s"].ToString() == "OK")
+            {
+                callback();
+            }
+            return socketResult;
+        }
+
+        public string receiveWebsocketDetails(byte[] recceivebuffer, WebSocketReceiveResult result)
+        {
+            return Encoding.UTF8.GetString(recceivebuffer, 0, result.Count);
+        }
+
+        public void sendWebsocketDetails(ExpandoObject sendData, ClientWebSocket webSocket)
+        {
+            string serializeData = JsonConvert.SerializeObject(sendData);
+            byte[] buffer = Encoding.UTF8.GetBytes(serializeData);
+            webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None).Wait();
+        }
+
+        public void sendWebsocketData(string serializeData, ClientWebSocket webSocket)
+        {
+            byte[] buffer = Encoding.UTF8.GetBytes(serializeData);
+            webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None).Wait();
+        }
+        public string getWebsocketDetails(ClientWebSocket webSocket)
+        {
+
+            byte[] recceivebuffer = new byte[1024];
+            Task<WebSocketReceiveResult> receiveTask = webSocket.ReceiveAsync(new ArraySegment<byte>(recceivebuffer), CancellationToken.None);
+            receiveTask.Wait();
+            WebSocketReceiveResult result = receiveTask.Result;
+            string socketResult = receiveWebsocketDetails(recceivebuffer, result);
+            return socketResult;
+        }
+
+        #endregion
+        //####################################################
+        #region Websockets Old 
         public WebsocketClient initializeWebSocket()
         {
             var url = new Uri(connection);
@@ -686,10 +748,11 @@ namespace thefirstock
             string authorizeBody = JsonConvert.SerializeObject(requestBody);
 
             client.ReconnectionHappened.Subscribe(info =>
-            { 
+            {
                 if (info.Type.ToString() == "NoMessageReceived")
                 {
                     client.Send(authorizeBody);
+
 
                 }
             });
@@ -697,7 +760,8 @@ namespace thefirstock
             return client;
         }
 
-        #region Websockets Methods
+        #endregion
+        #region Websockets Method
         public string startWebsockets()
         {
             var configData = ReadDataFromJson("config.json");
@@ -710,6 +774,8 @@ namespace thefirstock
             string authorizeBody = JsonConvert.SerializeObject(requestBody);
             return authorizeBody;
         }
+
+
 
         public string subscribeFeed(string k)
         {
@@ -750,7 +816,7 @@ namespace thefirstock
         {
             dynamic messageData = new ExpandoObject();
             messageData.t = "dk";
-           
+
             string requestBody = JsonConvert.SerializeObject(messageData);
             return requestBody;
         }
@@ -776,7 +842,7 @@ namespace thefirstock
         {
             dynamic messageData = new ExpandoObject();
             messageData.t = "ok";
-          
+
             string requestBody = JsonConvert.SerializeObject(messageData);
             return requestBody;
         }
@@ -784,13 +850,13 @@ namespace thefirstock
         {
             dynamic messageData = new ExpandoObject();
             messageData.t = "uo";
-          
+
             string requestBody = JsonConvert.SerializeObject(messageData);
             return requestBody;
         }
         #endregion
 
-        #endregion
+
 
         #region Old Method
         private dynamic APICall(string urlParameters, dynamic requestBodyData, string type = "POST")
