@@ -1,3 +1,6 @@
+🚨 **DEPRECATED** 🚨  This repository is no longer maintained
+
+
 # The Firstock Connect API C# client - v3
 
 To communicate with the Firstock Connect API using C#, you can use the official C# client library provided by Firstock.
